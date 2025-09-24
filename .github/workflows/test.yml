@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  COMMIT_MESSAGES: ${{ github.event.commits.*.message }}
+  COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
   CONDITION: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
 
 jobs:
