@@ -15,4 +15,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - if: ${{ github.event_name == 'push' && env.CONDITION == 'false' }}
-        run: echo "$env.COMMIT_MESSAGES"
+        run: echo "$COMMIT_MESSAGES"
