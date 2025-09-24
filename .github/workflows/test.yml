@@ -5,15 +5,14 @@ on:
     branches:
       - main
 
+env:
+  COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+  CONDITION: ${{ contains(join(github.env.COMMIT_MESSAGES), '#skip') }}
+
 jobs:
   a_test_job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: commit messages
-        env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-        run: echo "$COMMIT_MESSAGES"
-      - name: skip
-        if: contains(join(env.COMMIT_MESSAGES), '#SKIP')
-        run: echo "Skip"
+      - if: ${{ github.event_name == 'push' && env.CONDITION == 'false' }}
+        run: echo 'version will be tagged'
