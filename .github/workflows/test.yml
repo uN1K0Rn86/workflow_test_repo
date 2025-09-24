@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-  CONDITION: ${{ contains(join(github.env.COMMIT_MESSAGES), '#skip') }}
+  COMMIT_MESSAGES: ${{ github.event.commits.*.message }}
+  CONDITION: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
 
 jobs:
   a_test_job:
@@ -15,4 +15,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - if: ${{ github.event_name == 'push' && env.CONDITION == 'false' }}
-        run: echo 'version will be tagged'
+        run: echo "$env.COMMIT_MESSAGES"
